@@ -8,45 +8,59 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimaryDark" >
+        android:layout_height="50dp" >
 
-        <EditText
-            android:layout_width="0dp"
+        <android.support.v7.widget.SearchView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5"
             android:layout_margin="10dp"
-            android:id="@+id/searchET"
-            android:inputType="numberDecimal"
-            android:background="@color/colorPrimaryDark"
+            android:id="@+id/searchSV"
+            android:clickable="true"
             android:hint="@string/hint.search"
             android:textColor="@color/White"
             android:textColorHint="@color/White" />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="2"
-            android:id="@+id/searchBT"
-            android:text="@string/search"
-            android:backgroundTint="@color/White" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:id="@+id/changeLayoutBT"
-            android:layout_weight="1"
-            android:background="@drawable/change_layout" />
-
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <ViewSwitcher
+        android:id="@+id/searchVS"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/resultsRV"
-        android:orientation="vertical" />
+        android:layout_height="wrap_content"
+        android:inAnimation="@android:anim/slide_in_left" >
+
+        <LinearLayout
+            android:id="@+id/resultsView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/resultsRV"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/recentSearchesView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recentSearchesRV"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </ViewSwitcher>
+
+    <fragment
+        android:id="@+id/fragmentView"
+        android:name="com.yoyolab.mysearch.BannerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom" />
 
 </LinearLayout>

@@ -5,9 +5,9 @@ import java.util.Set;
 public interface IHistoryRepository {
     /**
      * Saves a query to the search history
-     * @param query to save
+     * @param queries to save
      */
-    void addSearchQuery(String query);
+    void addSearchQueries(Set<String> queries);
     /**
      * Get all the added search history
      * @return Set of all saved searches

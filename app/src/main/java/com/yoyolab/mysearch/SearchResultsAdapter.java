@@ -13,8 +13,7 @@ import butterknife.ButterKnife;
 import java.util.List;
 
 
-public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>
-{
+public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
     private List<Product> results;
     private int layoutMode = 1;
     private LruCache<String,Bitmap> imageCache = new LruCache<String, Bitmap>(14440000 * 15) {
