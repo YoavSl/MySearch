@@ -11,10 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
 
-        <activity android:name=".SearchPage" >
+        <activity
+            android:name=".SearchPage"
+            android:windowSoftInputMode="stateHidden|adjustPan" >  <!--Avoid soft keyboard pushing up the layout-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <data android:scheme="mysearch" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
 
@@ -23,6 +31,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".OnlineProductPage"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".WishListPage"
             android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>

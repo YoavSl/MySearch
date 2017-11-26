@@ -4,23 +4,56 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/White" >
+
+     <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:id="@+id/searchSV"
+        android:clickable="true"
+        android:hint="@string/hint.search"
+        android:textColor="@color/White"
+        android:textColorHint="@color/White" />
 
     <LinearLayout
+        android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
-        android:layout_height="50dp" >
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone" >
 
-        <android.support.v7.widget.SearchView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:id="@+id/searchSV"
-            android:clickable="true"
-            android:hint="@string/hint.search"
-            android:textColor="@color/White"
-            android:textColorHint="@color/White" />
-
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:indeterminate="true" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/emptySearchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/shoppingCartIV"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_marginTop="20sp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:background="@drawable/shopping_cart" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/shoppingCartIV"
+            android:textSize="21sp"
+            android:text="@string/productsListIsEmpty"
+            android:textColor="@color/Gray" />
+    </RelativeLayout>
 
     <ViewSwitcher
         android:id="@+id/searchVS"
@@ -30,21 +63,20 @@
 
         <LinearLayout
             android:id="@+id/resultsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/resultsRV"
                 android:orientation="vertical" />
-
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/recentSearchesView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <android.support.v7.widget.RecyclerView
@@ -52,7 +84,6 @@
                 android:layout_height="match_parent"
                 android:id="@+id/recentSearchesRV"
                 android:orientation="vertical" />
-
         </LinearLayout>
     </ViewSwitcher>
 
@@ -62,5 +93,4 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="bottom" />
-
 </LinearLayout>

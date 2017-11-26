@@ -26,7 +26,7 @@ public class GetOnlineImage extends AsyncTask<String,Void,Bitmap> {
 
     @Override
     protected void onPreExecute() {
-        imageView.setImageResource(R.color.colorDarkBlue);
+        imageView.setImageResource(R.drawable.loading_product_image);
         super.onPreExecute();
     }
 
