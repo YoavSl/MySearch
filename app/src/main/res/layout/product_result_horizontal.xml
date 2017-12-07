@@ -1,67 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp" >
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/productIV"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:maxHeight="100dp"
-            android:layout_margin="5dp"
-            android:maxWidth="100dp" />
-
-        <Button
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/wishListBT"
-            android:background="@drawable/add_to_wish_list"
-            style="?android:attr/borderlessButtonStyle" />
-    </FrameLayout>
+<android.support.v7.widget.CardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:card_view="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="105dp"
+android:layout_marginTop="8dp"
+android:layout_marginBottom="8dp"
+android:layout_marginStart="15dp"
+android:layout_marginEnd="15dp"
+card_view:cardCornerRadius="5dp"
+card_view:cardElevation="4dp">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp" >
 
-        <TextView
-            android:id="@+id/productNameTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8sp"
-            android:layout_marginStart="7sp"
-            android:layout_marginEnd="7sp"
-            android:gravity="center_horizontal"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/MyBlue"
-            android:ellipsize="end"
-            android:maxLines="1" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/productDescTV"
+            <ImageView
+                android:id="@+id/productIV"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:maxHeight="100dp"
+                android:layout_margin="5dp"
+                android:maxWidth="100dp" />
+
+            <Button
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/wishListBT"
+                android:background="@drawable/not_in_wish_list"
+                style="?android:attr/borderlessButtonStyle" />
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_marginStart="7sp"
-            android:layout_marginEnd="7sp"
-            android:gravity="center_horizontal"
-            android:textSize="15sp"
-            android:ellipsize="end"
-            android:maxLines="3" />
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:layout_margin="5dp" >
+
+            <TextView
+                android:id="@+id/productNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7sp"
+                android:layout_marginLeft="7sp"
+                android:layout_marginEnd="7sp"
+                android:layout_marginRight="7sp"
+                android:gravity="center_horizontal"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/MyBlue"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/productDescTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginStart="7sp"
+                android:layout_marginLeft="7sp"
+                android:layout_marginEnd="7sp"
+                android:layout_marginRight="7sp"
+                android:gravity="center_horizontal"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:maxLines="3" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.v7.widget.CardView>

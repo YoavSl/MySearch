@@ -1,9 +1,11 @@
-package com.yoyolab.mysearch;
+package com.yoyolab.mysearch.Services;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
+
+import com.yoyolab.mysearch.R;
 
 public class GetOnlineImage extends AsyncTask<String,Void,Bitmap> {
     private LruCache<String,Bitmap> imageCache;

@@ -1,18 +1,19 @@
-package com.yoyolab.mysearch;
+package com.yoyolab.mysearch.Activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,10 +28,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,14 +37,21 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import com.google.gson.Gson;
+import com.yoyolab.mysearch.Services.SearchForProducts;
+import com.yoyolab.mysearch.Adapters.ProductCategoriesAdapter;
+import com.yoyolab.mysearch.Adapters.ProductsResultsAdapter;
+import com.yoyolab.mysearch.Repositories.IHistoryRepository;
+import com.yoyolab.mysearch.Model.Product;
+import com.yoyolab.mysearch.R;
+import com.yoyolab.mysearch.Adapters.RecentSearchesAdapter;
+
 
 public class SearchPage extends AppCompatActivity implements IHistoryRepository {
-    private boolean changeLayoutVisible = false;
-    private API api;
-    private List<Product> searchResults;
-    private SearchResultsAdapter resultsAdapter;
+    private boolean homeButtonVisible = false, changeLayoutButtonVisible = true;
+    private ProductCategoriesAdapter categoriesAdapter;
+    private ProductsResultsAdapter resultsAdapter;
     private RecentSearchesAdapter recentsAdapter;
+    private SearchForProducts searchForProducts;
     private int layoutMode = 1;
     private RecyclerView.LayoutManager listLayoutManager;
     private GridLayoutManager gridLayoutManager;
@@ -53,14 +59,11 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
     private String lastQuery;
     public static final String PREFS_NAME = "MyPrefsFile";
 
-    @BindView(R.id.resultsRV) RecyclerView resultsRV;
+    public @BindView(R.id.loadingPanel) View loadingPanel;
+    @BindView(R.id.productsRV) RecyclerView productsRV;
     @BindView(R.id.recentSearchesRV) RecyclerView recentSearchesRV;
     @BindView(R.id.searchVS) ViewSwitcher searchVS;
     @BindView(R.id.searchSV) SearchView searchSV;
-    @BindView(R.id.resultsView) View resultsView;
-    @BindView(R.id.recentSearchesView) View recentSearchesView;
-    @BindView(R.id.loadingPanel) View loadingPanel;
-    @BindView(R.id.emptySearchView) View emptySearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +74,13 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
         ButterKnife.setDebug(true);
         ButterKnife.bind(this);
 
-        api = new API();
-
-        confResultsList();
+        confRecyclerViews();
+        confCategoriesAdapter();
         confSearchView();
         confSearchHistory();
+
+        IntentFilter productsFilter = new IntentFilter("SearchPage -> Products are ready");
+        LocalBroadcastManager.getInstance(this).registerReceiver(productsReceiver, productsFilter);
 
         if (savedInstanceState != null) {
             CharSequence savedSearchValue = savedInstanceState.getCharSequence("SearchValue");
@@ -83,7 +88,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
 
             if (savedInstanceState.getString("ResultsExist").equals("Yes")) {
                 lastQuery = savedSearchValue.toString();
-                searchForProducts();
+                searchQuery();
             }
         }
 
@@ -116,54 +121,54 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (changeLayoutVisible)
+        if (homeButtonVisible)
             menu.getItem(0).setVisible(true);
         else
             menu.getItem(0).setVisible(false);
+
+        if (changeLayoutButtonVisible)
+            menu.getItem(1).setVisible(true);
+        else
+            menu.getItem(1).setVisible(false);
         return true;
     }
 
     //Handles menu buttons
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (layoutMode == 1) {
-            item.setIcon(R.drawable.change_layout_list);
-            resultsRV.setLayoutManager(gridLayoutManager);
-            layoutMode++;
+        if (item.getItemId() == R.id.homePage) {
+            productsRV.setAdapter(categoriesAdapter);
+            homeButtonVisible = false;
+            invalidateOptionsMenu();
         }
-        else {
-            item.setIcon(R.drawable.change_layout_grid);
-            resultsRV.setLayoutManager(listLayoutManager);
-            layoutMode = 1;
+        else if (item.getItemId() == R.id.changeLayout) {
+            if (layoutMode == 1) {
+                item.setIcon(R.drawable.change_layout_list);
+                productsRV.setLayoutManager(gridLayoutManager);
+                layoutMode++;
+            }
+            else {
+                item.setIcon(R.drawable.change_layout_grid);
+                productsRV.setLayoutManager(listLayoutManager);
+                layoutMode = 1;
+            }
+            categoriesAdapter.setLayoutMode(layoutMode);
+
+            if (resultsAdapter != null)
+                resultsAdapter.setLayoutMode(layoutMode);
         }
-        resultsAdapter.setLayoutMode(layoutMode);
+        else {   //if itemId is R.id.wishList
+            startActivity(new Intent(this, WishListPage.class));
+            overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void confResultsList() {
+    private void confRecyclerViews() {
         gridLayoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.itemsCount));
         listLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        resultsRV.setLayoutManager(listLayoutManager);
-
-        resultsRV.addOnItemTouchListener(new resultsTouchListener(getApplicationContext(), resultsRV,
-                new resultsTouchListener.IRecyclerTouchListener() {
-                    @Override
-                    public void onClickItem(View view, int position) {
-                        Intent localProdIntent = new Intent(getApplicationContext(),LocalProductPage.class);
-                        Bundle bundle = new Bundle();
-
-                        bundle.putString("Name",searchResults.get(position).name);
-                        bundle.putString("Description",searchResults.get(position).description);
-                        bundle.putInt("ID",searchResults.get(position).id);
-                        bundle.putString("ImageURL",searchResults.get(position).imageUrl);
-
-                        localProdIntent.putExtra("ProductDetails",bundle);
-                        startActivity(localProdIntent);
-                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
-                    }
-                }));
-
+        productsRV.setLayoutManager(listLayoutManager);
 
         //Add RecyclerView entrance animation
         AnimationSet set = new AnimationSet(true);
@@ -183,6 +188,12 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
         recentSearchesRV.setLayoutAnimation(controller);
     }
 
+    private void confCategoriesAdapter() {  //Conf it so it'll run only once when you change orientation
+        String[] test = {"Clothing", "Shoes", "Electronics", "Appliances", "Tools", "Jewelry", "Beauty", "Groceries"};
+        categoriesAdapter = new ProductCategoriesAdapter(test, this);
+        productsRV.setAdapter(categoriesAdapter);
+    }
+
     private void confSearchView() {
         searchSV.setActivated(true);
         searchSV.setQueryHint("Type your keyword here");
@@ -195,18 +206,18 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     searchVS.showNext();
-                    emptySearchView.setVisibility(View.GONE);
-                    changeLayoutVisible = false;
+                    homeButtonVisible = false;
+                    changeLayoutButtonVisible = false;
                     invalidateOptionsMenu();
                 }
                 else {
                     searchVS.showPrevious();
-                    if ((resultsAdapter == null) || (resultsAdapter.getItemCount() == 0))
-                        emptySearchView.setVisibility(View.VISIBLE);
-                    else {
-                        changeLayoutVisible = true;
-                        invalidateOptionsMenu();
-                    }
+
+                    if (homeButtonVisible)
+                        homeButtonVisible = true;
+
+                    changeLayoutButtonVisible = true;
+                    invalidateOptionsMenu();
                 }
             }
         });
@@ -219,7 +230,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
                         WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
                 lastQuery = query;
-                searchForProducts();
+                searchQuery();
                 return false;
             }
 
@@ -237,74 +248,92 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
         recentSearchesRV.setAdapter(recentsAdapter);
         recentSearchesRV.setLayoutManager(new LinearLayoutManager
                 (this, LinearLayoutManager.VERTICAL, false));
-
-        recentSearchesRV.addOnItemTouchListener(new resultsTouchListener(getApplicationContext(), recentSearchesRV,
-                new resultsTouchListener.IRecyclerTouchListener() {
-                    @Override
-                    public void onClickItem(View view, int position) {
-                        if (position != 0) {
-                            int counter = 0;
-
-                            for (String recentSearch : searchHistory) {
-                                if (counter == (position - 1)) {
-                                    searchSV.setQuery(recentSearch, false);
-                                    lastQuery = recentSearch;
-                                    searchForProducts();
-                                    break;
-                                }
-                                counter++;
-                            }
-                        }
-                    }
-                }));
     }
 
-    private void searchForProducts() {
+    public void initiateSearchFromHistory(int position) {
+        int counter = 0;
+
+        for (String recentSearch : searchHistory) {
+            if (counter == (position - 1)) {
+                searchSV.setQuery(recentSearch, false);
+                lastQuery = recentSearch;
+                searchQuery();
+                break;
+            }
+            counter++;
+        }
+    }
+
+    private void searchQuery() {
+        //Hide the soft keyboard
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+
         loadingPanel.setVisibility(View.VISIBLE);
-        searchResults = new ArrayList<>();
-        GetProducts getProducts = new GetProducts();
-        getProducts.execute(api);
+        searchForProducts = new SearchForProducts(new HashSet<>(Arrays.asList(lastQuery)), "ByName", this);
     }
 
     private void setSearchResults(List<Product> results) {
-        searchResults = results;
         if (resultsAdapter == null) {
-            resultsAdapter = new SearchResultsAdapter(results, this);
-            resultsRV.setAdapter(resultsAdapter);
+            resultsAdapter = new ProductsResultsAdapter(results, this);
+            resultsAdapter.setLayoutMode(layoutMode);
         }
         else {
-            resultsAdapter.setResults(results);
-            resultsAdapter.notifyDataSetChanged();
+            //Doesn't work from some reason so I'm creating a new adapter instead
+            //resultsAdapter.setResults(results);
+            //resultsAdapter.notifyDataSetChanged();
+
+            resultsAdapter = new ProductsResultsAdapter(results, this);
         }
 
         if (resultsAdapter.getItemCount() == 0) {
             (Snackbar.make(recentSearchesRV, "No results, please try again", Snackbar.LENGTH_LONG)).show();
-            changeLayoutVisible = false;
+            homeButtonVisible = false;
+
+            productsRV.setAdapter(categoriesAdapter);
         }
         else {
-            emptySearchView.setVisibility(View.GONE);
-            changeLayoutVisible = true;
+            homeButtonVisible = true;
             searchSV.clearFocus();
 
+            productsRV.setAdapter(resultsAdapter);
+
             searchHistory.add(lastQuery);
-            addSearchQueries(searchHistory);
+            saveSearchQueries(searchHistory);
             recentsAdapter.setRecents(new ArrayList<>(searchHistory));
             recentsAdapter.notifyDataSetChanged();
         }
         invalidateOptionsMenu();  //Now onCreateOptionsMenu() is called again
     }
 
+    private BroadcastReceiver productsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            loadingPanel.setVisibility(View.GONE);
+
+            if (searchForProducts == null)   //It means that the search was through the categoriesAdapter
+                searchForProducts = categoriesAdapter.getSearchForProductsInstance();
+
+            setSearchResults(searchForProducts.getProducts());
+            searchForProducts = null;
+        }
+    };
+
     @Override
     public Set<String> getSearchHistory() {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        Set<String> searchHistory = preferences.getStringSet("SearchHistory", this.searchHistory);
+        Set<String> searchHistoryTemp = preferences.getStringSet("SearchHistory", this.searchHistory);
         HashSet<String> newSearchHistory = new HashSet<>();
-        newSearchHistory.addAll(searchHistory);
+        newSearchHistory.addAll(searchHistoryTemp);
         return newSearchHistory;
     }
 
     @Override
-    public void addSearchQueries(Set<String> queries) {
+    public void saveSearchQueries(Set<String> queries) {
+        //if clear recents button pressed
+        if (queries == null)
+            searchHistory = new HashSet<>();
+
         // We need an Editor object to make preference changes.
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -312,26 +341,5 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
 
         // Commit the edits
         editor.apply();
-    }
-
-    class GetProducts extends AsyncTask<API,Void,List<Product>> {
-        @Override
-        protected void onPostExecute(List<Product> products) {
-            loadingPanel.setVisibility(View.GONE);
-            setSearchResults(products);
-        }
-
-        @Override
-        protected List<Product> doInBackground(API... params) {
-            API api = params[0];
-            List<Product> products = null;
-            try {
-                products = api.get(lastQuery);
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            return products;
-        }
     }
 }

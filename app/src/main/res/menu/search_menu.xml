@@ -3,9 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
+        android:id="@+id/homePage"
+        android:title=""
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/home_page_button"
+        android:visible="false" />
+
+    <item
         android:id="@+id/changeLayout"
         android:title=""
-        app:showAsAction="always"
-        android:icon="@drawable/change_layout_grid"
-        android:visible="false" />
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/change_layout_grid" />
+
+    <item
+        android:id="@+id/wishList"
+        android:title=""
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/wish_list_button" />
 </menu>

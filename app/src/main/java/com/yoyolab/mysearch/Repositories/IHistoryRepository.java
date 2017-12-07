@@ -1,13 +1,14 @@
-package com.yoyolab.mysearch;
+package com.yoyolab.mysearch.Repositories;
 
 import java.util.Set;
 
 public interface IHistoryRepository {
     /**
-     * Saves a query to the search history
+     * Saves all queries to the search history
      * @param queries to save
      */
-    void addSearchQueries(Set<String> queries);
+    void saveSearchQueries(Set<String> queries);
+
     /**
      * Get all the added search history
      * @return Set of all saved searches

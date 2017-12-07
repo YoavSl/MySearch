@@ -1,4 +1,4 @@
-package com.yoyolab.mysearch;
+package com.yoyolab.mysearch.Services;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.inneractive.api.ads.sdk.InneractiveAdManager;
 import com.inneractive.api.ads.sdk.InneractiveAdView;
+import com.yoyolab.mysearch.R;
 
 public class BannerFragment extends Fragment {
 

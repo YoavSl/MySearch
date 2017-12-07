@@ -1,58 +1,97 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/White" >
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="300sp"
-        android:layout_marginTop="20sp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/itemIV" />
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="22sp"
-        android:layout_marginLeft="30sp"
-        android:layout_marginRight="30sp"
-        android:id="@+id/itemNameTV"
-        android:textSize="24sp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/RegularSet" />
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:id="@+id/productImageView"
+            card_view:cardCornerRadius="5dp"
+            card_view:cardElevation="4dp" >
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="110dp"
-        android:layout_marginTop="10sp"
-        android:layout_marginLeft="30sp"
-        android:layout_marginRight="30sp"
-        android:layout_marginBottom="30sp"
-        android:scrollbars="vertical"
-        android:fillViewport="true">
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp" >
+
+                    <ImageView
+                        android:layout_width="300dp"
+                        android:layout_height="300dp"
+                        android:id="@+id/itemIV" />
+
+                    <Button
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="25dp"
+                        android:id="@+id/wishListBT"
+                        style="?android:attr/borderlessButtonStyle" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="38sp"
+            android:layout_marginStart="20sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginEnd="20sp"
+            android:layout_marginRight="20sp"
+            android:id="@+id/itemNameTV"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:textColor="@color/RegularSet"
+            android:ellipsize="end"
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginBottom="20sp"
             android:layout_gravity="center_horizontal"
             android:id="@+id/itemDescTV"
             android:textSize="17sp"
-            android:scrollbars = "vertical" />
+            android:ellipsize="end"
+            android:maxLines="9" />
 
-    </ScrollView>
+    </LinearLayout>
 
-    <Button
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="45dp"
-        android:id="@+id/buyBT"
-        android:background="@drawable/buy_button"/>
+    <android.support.design.widget.FloatingActionButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:id="@+id/buyBT"
+    android:src="@drawable/buy_button"
+    app:backgroundTint="@color/MyBlueDark"
+    app:layout_anchor="@id/productImageView"
+    app:layout_anchorGravity="bottom|right|end"/>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
+

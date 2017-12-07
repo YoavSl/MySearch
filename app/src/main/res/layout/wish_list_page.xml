@@ -1,73 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/White" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:visibility="gone" >
-
-        <ImageView
-            android:layout_width="45dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5sp"
-            android:background="@drawable/wish_list_title_stars" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12sp"
-            android:layout_marginStart="12sp"
-            android:layout_marginRight="12sp"
-            android:layout_marginEnd="12sp"
-            android:textSize="29sp"
-            android:text="@string/wishListTitle"
-            android:textColor="@color/Black" />
-
-        <ImageView
-            android:layout_width="45dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="5sp"
-            android:background="@drawable/wish_list_title_stars_reversed" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/emptyWishListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <ImageView
-            android:id="@+id/starIV"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
-            android:layout_marginTop="20sp"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:background="@drawable/add_to_wish_list" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/starIV"
-            android:textSize="21sp"
-            android:text="@string/wishListIsEmpty"
-            android:textColor="@color/Gray" />
-    </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/favoriteItemsRV"
-        android:orientation="vertical" />
-</LinearLayout>
+        android:orientation="vertical" >
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:layout_marginTop="25dp"
+            card_view:cardCornerRadius="0dp"
+            card_view:cardElevation="5dp" >
+
+            <TextView
+                android:id="@+id/wishListTitleTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="29sp"
+                android:text="@string/wishListTitle"
+                android:textColor="@color/MyBlueDarker" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:id="@+id/favoritesRV"
+            android:orientation="vertical"
+            android:overScrollMode="never" />
+
+        <RelativeLayout
+            android:id="@+id/emptyWishListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/starIV"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_marginTop="20sp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:background="@drawable/not_in_wish_list" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:layout_centerInParent="true"
+                android:layout_below="@+id/starIV"
+                android:textSize="21sp"
+                android:text="@string/wishListIsEmpty"
+                android:textColor="@color/Gray" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:indeterminate="true" />
+    </LinearLayout>
+
+</FrameLayout>
+

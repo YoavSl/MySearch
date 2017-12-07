@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name=".SearchPage"
+            android:name=".Activities.SearchPage"
             android:windowSoftInputMode="stateHidden|adjustPan" >  <!--Avoid soft keyboard pushing up the layout-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,14 +27,14 @@
         </activity>
 
         <activity
-            android:name=".LocalProductPage"
+            android:name=".Activities.LocalProductPage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".OnlineProductPage"
+            android:name=".Activities.OnlineProductPage"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".WishListPage"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".Activities.WishListPage"
+            android:theme="@style/AppTheme"/>
 
     </application>
 </manifest>

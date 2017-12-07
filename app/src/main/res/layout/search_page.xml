@@ -1,21 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/White" >
+    android:layout_height="match_parent" >
 
-     <android.support.v7.widget.SearchView
+        <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:id="@+id/searchSV"
-        android:clickable="true"
-        android:hint="@string/hint.search"
-        android:textColor="@color/White"
-        android:textColorHint="@color/White" />
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+         <android.support.v7.widget.SearchView
+             android:layout_width="match_parent"
+             android:layout_height="50dp"
+             android:layout_margin="10dp"
+             android:id="@+id/searchSV"
+             android:clickable="true"
+             android:focusable="true"
+             android:hint="@string/hint.search"
+             android:textColor="@color/White"
+             android:textColorHint="@color/White" />
+
+        <ViewSwitcher
+            android:id="@+id/searchVS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inAnimation="@android:anim/slide_in_left" >
+
+            <LinearLayout
+                android:id="@+id/resultsView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/productsRV"
+                    android:orientation="vertical"
+                    android:overScrollMode="never" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recentSearchesView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/recentSearchesRV"
+                    android:orientation="vertical"
+                    android:overScrollMode="never" />
+            </LinearLayout>
+        </ViewSwitcher>
+
+        <!--
+        <fragment
+            android:id="@+id/fragmentView"
+            android:nacom.yoyolab.mysearch.Services.BannerFragmentment"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom" />
+            -->
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/loadingPanel"
@@ -30,67 +77,5 @@
             android:indeterminate="true" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/emptySearchView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+</FrameLayout>
 
-        <ImageView
-            android:id="@+id/shoppingCartIV"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
-            android:layout_marginTop="20sp"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:background="@drawable/shopping_cart" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/shoppingCartIV"
-            android:textSize="21sp"
-            android:text="@string/productsListIsEmpty"
-            android:textColor="@color/Gray" />
-    </RelativeLayout>
-
-    <ViewSwitcher
-        android:id="@+id/searchVS"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inAnimation="@android:anim/slide_in_left" >
-
-        <LinearLayout
-            android:id="@+id/resultsView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/resultsRV"
-                android:orientation="vertical" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/recentSearchesView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/recentSearchesRV"
-                android:orientation="vertical" />
-        </LinearLayout>
-    </ViewSwitcher>
-
-    <fragment
-        android:id="@+id/fragmentView"
-        android:name="com.yoyolab.mysearch.BannerFragment"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom" />
-</LinearLayout>

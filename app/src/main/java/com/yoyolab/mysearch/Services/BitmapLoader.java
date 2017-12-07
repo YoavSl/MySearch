@@ -1,4 +1,4 @@
-package com.yoyolab.mysearch;
+package com.yoyolab.mysearch.Services;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
