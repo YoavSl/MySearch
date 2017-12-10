@@ -2,6 +2,7 @@ package com.yoyolab.mysearch.Repositories;
 
 import java.util.Set;
 
+
 public interface IHistoryRepository {
     /**
      * Saves all queries to the search history

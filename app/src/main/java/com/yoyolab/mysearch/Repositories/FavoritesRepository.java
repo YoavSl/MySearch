@@ -1,6 +1,5 @@
 package com.yoyolab.mysearch.Repositories;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -9,6 +8,7 @@ import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.yoyolab.mysearch.Activities.SearchPage.PREFS_NAME;
+
 
 public class FavoritesRepository {
     private Context context;

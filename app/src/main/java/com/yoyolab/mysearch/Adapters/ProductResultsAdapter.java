@@ -5,11 +5,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,7 @@ import com.yoyolab.mysearch.Activities.LocalProductPage;
 
 import com.yoyolab.mysearch.Activities.SearchPage;
 import com.yoyolab.mysearch.Activities.WishListPage;
-import com.yoyolab.mysearch.Services.GetOnlineImage;
+import com.yoyolab.mysearch.Services.GetImageFromUrl;
 import com.yoyolab.mysearch.Model.Product;
 import com.yoyolab.mysearch.R;
 import com.yoyolab.mysearch.Repositories.FavoritesRepository;
@@ -35,20 +33,17 @@ import java.util.List;
 public class ProductResultsAdapter extends RecyclerView.Adapter<ProductResultsAdapter.ViewHolder> {
     private Context context;
     private List<Product> results;
+    private GetImageFromUrl getImageFromUrl;
     private FavoritesRepository favoritesRepository;
     private int layoutMode = 1;
     private AlphaAnimation fadeIn, fadeOut;
-    private LruCache<String,Bitmap> imageCache = new LruCache<String, Bitmap>(14440000 * 15) {
-        @Override
-        protected int sizeOf(String key, Bitmap value) {
-            return value.getByteCount();
-        }
-    };
 
     public ProductResultsAdapter(List<Product> results, Context context) {
         this.results = results;
         this.context = context;
-        this.favoritesRepository = new FavoritesRepository(context);
+
+        getImageFromUrl = new GetImageFromUrl();
+        favoritesRepository = new FavoritesRepository(context);
 
         if (context instanceof SearchPage) {
             IntentFilter wishListStatusFilterSP = new IntentFilter("SearchPage - There is a change in the wish list");
@@ -72,7 +67,9 @@ public class ProductResultsAdapter extends RecyclerView.Adapter<ProductResultsAd
     }
 
     public void setResults(List<Product> results) {
-        this.results = results;
+        this.results.clear();
+        this.results.addAll(results);
+        notifyDataSetChanged();
     }
 
     public void setLayoutMode(int mode) {
@@ -113,8 +110,6 @@ public class ProductResultsAdapter extends RecyclerView.Adapter<ProductResultsAd
         @BindView(R.id.productPriceTV) TextView productPriceTV;
         @BindView(R.id.priceBackgroundIV) ImageView priceBackgroundIV;
         @BindView(R.id.inWishListView) View inWishListView;
-
-        GetOnlineImage getImageTask;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -169,24 +164,10 @@ public class ProductResultsAdapter extends RecyclerView.Adapter<ProductResultsAd
             });
         }
 
-        private void setImage(String imageURL) {
-            Bitmap bmp = imageCache.get(imageURL);
-            if(bmp != null)
-                productIV.setImageBitmap(bmp);
-
-            else {
-                if(getImageTask != null) {
-                    getImageTask.cancel(true);
-                }
-                getImageTask = new GetOnlineImage(productIV,imageCache);
-                getImageTask.execute(imageURL);
-            }
-        }
-
         public void bind(Product result) {
             productNameTV.setText(result.name);
             productDescTV.setText(result.description);
-            setImage(result.imageUrl);
+            getImageFromUrl.get(result.imageUrl, context, productIV, R.drawable.loading_product_image);
 
             if (result.price == 0)   //Product doesn't have a price
                 priceBackgroundIV.setVisibility(View.INVISIBLE);
@@ -237,6 +218,9 @@ public class ProductResultsAdapter extends RecyclerView.Adapter<ProductResultsAd
                     results.remove(i);
             }
             notifyDataSetChanged();
+
+            if (results.size() == 0)
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("WishListPage - Wish list is empty"));
         }
     };
 }

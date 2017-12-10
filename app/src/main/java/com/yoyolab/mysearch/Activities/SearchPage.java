@@ -84,10 +84,10 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
         LocalBroadcastManager.getInstance(this).registerReceiver(productsReceiver, productsFilter);
 
         if (savedInstanceState != null) {
-            CharSequence savedSearchValue = savedInstanceState.getCharSequence("SearchValue");
+            CharSequence savedSearchValue = savedInstanceState.getCharSequence("searchValue");
             searchSV.setQuery(savedSearchValue, false);
 
-            if (savedInstanceState.getString("ResultsExist").equals("Yes")) {
+            if (savedInstanceState.getString("resultsExist").equals("yes")) {
                 lastQuery = savedSearchValue.toString();
                 searchQuery();
             }
@@ -104,12 +104,12 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putCharSequence("SearchValue", searchSV.getQuery());
+        outState.putCharSequence("searchValue", searchSV.getQuery());
 
         if (resultsAdapter == null)
-            outState.putString("ResultsExist", "No");
+            outState.putString("resultsExist", "no");
         else
-            outState.putString("ResultsExist", "Yes");
+            outState.putString("resultsExist", "yes");
     }
 
     @Override
@@ -214,7 +214,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
                 else {
                     searchVS.showPrevious();
 
-                    if (homeButtonVisible)
+                    if ((resultsAdapter != null) && (resultsAdapter.getItemCount() != 0))
                         homeButtonVisible = true;
 
                     changeLayoutButtonVisible = true;
@@ -279,13 +279,8 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
             resultsAdapter = new ProductResultsAdapter(results, this);
             resultsAdapter.setLayoutMode(layoutMode);
         }
-        else {
-            //Doesn't work from some reason so I'm creating a new adapter instead
-            //resultsAdapter.setResults(results);
-            //resultsAdapter.notifyDataSetChanged();
-
-            resultsAdapter = new ProductResultsAdapter(results, this);
-        }
+        else
+            resultsAdapter.setResults(results);
 
         if (resultsAdapter.getItemCount() == 0) {
             (Snackbar.make(recentSearchesRV, "No results, please try again", Snackbar.LENGTH_LONG)).show();
@@ -320,7 +315,6 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
                 searchForProducts = categoriesAdapter.getSearchForProductsInstance();
                 categoriesSearchExecuted = true;
             }
-
             setSearchResults(searchForProducts.getProducts());
             searchForProducts = null;
         }
@@ -353,7 +347,5 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-
     }
 }

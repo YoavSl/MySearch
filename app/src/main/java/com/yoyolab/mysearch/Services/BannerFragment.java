@@ -10,6 +10,7 @@ import com.inneractive.api.ads.sdk.InneractiveAdManager;
 import com.inneractive.api.ads.sdk.InneractiveAdView;
 import com.yoyolab.mysearch.R;
 
+
 public class BannerFragment extends Fragment {
 
     @Override

@@ -13,7 +13,6 @@ import com.yoyolab.mysearch.Activities.SearchPage;
 import com.yoyolab.mysearch.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 

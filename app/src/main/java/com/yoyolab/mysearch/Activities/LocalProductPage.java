@@ -1,21 +1,19 @@
 package com.yoyolab.mysearch.Activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.yoyolab.mysearch.Services.GetOnlineImage;
 import com.yoyolab.mysearch.Model.Product;
 import com.yoyolab.mysearch.R;
 import com.yoyolab.mysearch.Repositories.FavoritesRepository;
+import com.yoyolab.mysearch.Services.GetImageFromUrl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +21,7 @@ import butterknife.ButterKnife;
 
 public class LocalProductPage extends AppCompatActivity {
     Product product;
-    GetOnlineImage imageLoadTask;
+    private GetImageFromUrl getImageFromUrl;
     FavoritesRepository favoritesRepository;
     private AlphaAnimation fadeIn, fadeOut;
 
@@ -41,7 +39,8 @@ public class LocalProductPage extends AppCompatActivity {
         setContentView(R.layout.local_product_page);
         ButterKnife.bind(this);
 
-        favoritesRepository = new FavoritesRepository(getApplicationContext());
+        getImageFromUrl = new GetImageFromUrl();
+        favoritesRepository = new FavoritesRepository(this);
 
         confListeners();
         confWishListStateAnimations();
@@ -129,8 +128,7 @@ public class LocalProductPage extends AppCompatActivity {
                 } */
             productPriceTV.setText(price);
         }
-        imageLoadTask = new GetOnlineImage(productIV,null);
-        imageLoadTask.execute(product.imageUrl);
+        getImageFromUrl.get(product.imageUrl, this, productIV, R.drawable.loading_product_image);
 
         if (product.inWishList.equals("True"))
             inWishListIV.setVisibility(View.VISIBLE);

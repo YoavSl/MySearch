@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:id="@+id/productImageView"
-            card_view:cardCornerRadius="5dp"
+            card_view:cardCornerRadius="0dp"
             card_view:cardElevation="4dp" >
 
             <LinearLayout
@@ -47,6 +47,8 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_marginTop="-1dp"
+                        android:layout_marginStart="-1dp"
+                        android:layout_marginLeft="-1dp"
                         android:background="@drawable/price_background" />
 
                     <TextView

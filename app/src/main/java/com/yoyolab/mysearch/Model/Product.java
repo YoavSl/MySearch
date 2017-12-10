@@ -1,5 +1,6 @@
 package com.yoyolab.mysearch.Model;
 
+
 public class Product {
     public int id, price;
     public String name;

@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class API {
     private final static String DATA_ENDPOINT_BY_NAME = "https://platform.shopyourway.com/products/search?" +
             "q=%s" +
