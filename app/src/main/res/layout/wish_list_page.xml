@@ -11,6 +11,7 @@
 
         <android.support.v7.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/wishListTitleView"
             android:layout_width="match_parent"
             android:layout_height="45sp"
             android:layout_marginTop="25dp"
@@ -18,7 +19,6 @@
             card_view:cardElevation="5dp" >
 
             <TextView
-                android:id="@+id/wishListTitleTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -43,21 +43,21 @@
             android:visibility="gone" >
 
             <ImageView
-                android:id="@+id/starIV"
+                android:id="@+id/emptyWishListIV"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
                 android:layout_marginTop="20sp"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:background="@drawable/not_in_wish_list" />
+                android:background="@drawable/empty_wish_list_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
                 android:layout_centerInParent="true"
-                android:layout_below="@+id/starIV"
-                android:textSize="21sp"
+                android:layout_below="@+id/emptyWishListIV"
+                android:textSize="22sp"
                 android:text="@string/wishListIsEmpty"
                 android:textColor="@color/Gray" />
 

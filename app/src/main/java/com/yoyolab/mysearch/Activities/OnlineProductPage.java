@@ -22,8 +22,8 @@ public class OnlineProductPage extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("ProdIDBundle");
-        int productId = bundle.getInt("ID");
+        Bundle bundle = intent.getBundleExtra("prodIdBundle");
+        int productId = bundle.getInt("id");
 
         productWV.setWebViewClient(new WebViewClient());
         productWV.loadUrl("https://www.shopyourway.com/xxx/" + productId);

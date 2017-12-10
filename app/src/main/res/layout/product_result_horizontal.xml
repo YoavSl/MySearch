@@ -11,12 +11,17 @@ android:layout_marginEnd="15dp"
 card_view:cardCornerRadius="5dp"
 card_view:cardElevation="4dp">
 
+    <FrameLayout
+        android:id="@+id/inWishListView"
+        android:background="@drawable/in_wish_list"
+        android:layout_width="match_parent"
+        android:layout_height="2.5dp" />
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp" >
+        android:layout_height="wrap_content" >
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -26,19 +31,27 @@ card_view:cardElevation="4dp">
                 android:id="@+id/productIV"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:maxHeight="100dp"
-                android:layout_margin="5dp"
-                android:maxWidth="100dp" />
+                android:layout_margin="10dp" />
 
-            <Button
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/wishListBT"
-                android:background="@drawable/not_in_wish_list"
-                style="?android:attr/borderlessButtonStyle" />
+            <ImageView
+                android:id="@+id/priceBackgroundIV"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="-1dp"
+                android:background="@drawable/price_background" />
+
+            <TextView
+                android:id="@+id/productPriceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginLeft="5sp"
+                android:layout_marginTop="6sp"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/White"
+                android:rotation="-45" />
+
         </FrameLayout>
 
         <LinearLayout
@@ -51,6 +64,7 @@ card_view:cardElevation="4dp">
                 android:id="@+id/productNameTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="3sp"
                 android:layout_marginStart="7sp"
                 android:layout_marginLeft="7sp"
                 android:layout_marginEnd="7sp"

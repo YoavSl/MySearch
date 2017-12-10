@@ -66,6 +66,7 @@ public class API {
                 results.add(parseProduct(productObj));
             }
             else {   //ByName or ByCategoryId
+
                 JSONObject json = new JSONObject(res);
                 products = json.getJSONArray("products");
 
@@ -81,10 +82,20 @@ public class API {
     }
 
     private Product parseProduct(JSONObject productObj) throws JSONException{
+        int price;
+
+        //Not every product has a price so we need to check it
+        try {
+            price = productObj.getInt("price");
+        } catch (JSONException e) {
+            price = 0;
+        }
+
         return new Product(
+                productObj.getInt("id"),
+                price,
                 productObj.getString("name"),
                 productObj.getString("description"),
-                productObj.getInt("id"),
                 productObj.getString("imageUrl")
         );
     }

@@ -23,9 +23,9 @@ public class SearchForProducts extends AsyncTask<API,Void,List<Product>> {
     public SearchForProducts(Set<String> queries, String queryType, Context context) {
         this.queries = queries;
         this.queryType = queryType;
+        this.context = context;
 
-        API api = new API();
-        execute(api);
+        execute(new API());
     }
 
     @Override
@@ -35,7 +35,7 @@ public class SearchForProducts extends AsyncTask<API,Void,List<Product>> {
         try {
             if (queries.size() == 1)
                 products = api.get(queries.iterator().next(), queryType);
-            else   //queries.size > 1 & queryType is "ByProductId"
+            else {   //queries.size > 1 & queryType is "ByProductId"
                 products = new ArrayList<>();
 
                 for (String query : queries) {
@@ -44,6 +44,7 @@ public class SearchForProducts extends AsyncTask<API,Void,List<Product>> {
                     if (product != null)   //Doing this check cause there is a possibility that the favorite product doesn't exist anymore on the website
                         products.add(product);
                 }
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -55,9 +56,9 @@ public class SearchForProducts extends AsyncTask<API,Void,List<Product>> {
         this.products = products;
 
         if (context instanceof SearchPage)
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("SearchPage -> Products are ready"));
-        else   //instanceOf WishListPage
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("WishListPage -> Products are ready"));
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("SearchPage - Products are ready"));
+        else  //instanceOf WishListPage
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("WishListPage - Products are ready"));
     }
 
     public List<Product> getProducts() {

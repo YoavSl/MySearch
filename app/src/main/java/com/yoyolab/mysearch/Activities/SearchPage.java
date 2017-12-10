@@ -31,15 +31,16 @@ import android.widget.ViewSwitcher;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.yoyolab.mysearch.Adapters.ProductResultsAdapter;
 import com.yoyolab.mysearch.Services.SearchForProducts;
 import com.yoyolab.mysearch.Adapters.ProductCategoriesAdapter;
-import com.yoyolab.mysearch.Adapters.ProductsResultsAdapter;
 import com.yoyolab.mysearch.Repositories.IHistoryRepository;
 import com.yoyolab.mysearch.Model.Product;
 import com.yoyolab.mysearch.R;
@@ -47,15 +48,15 @@ import com.yoyolab.mysearch.Adapters.RecentSearchesAdapter;
 
 
 public class SearchPage extends AppCompatActivity implements IHistoryRepository {
-    private boolean homeButtonVisible = false, changeLayoutButtonVisible = true;
+    private boolean homeButtonVisible = false, changeLayoutButtonVisible = true, categoriesSearchExecuted = false;
     private ProductCategoriesAdapter categoriesAdapter;
-    private ProductsResultsAdapter resultsAdapter;
+    private ProductResultsAdapter resultsAdapter;
     private RecentSearchesAdapter recentsAdapter;
     private SearchForProducts searchForProducts;
     private int layoutMode = 1;
     private RecyclerView.LayoutManager listLayoutManager;
     private GridLayoutManager gridLayoutManager;
-    private Set<String> searchHistory = new HashSet<>();
+    private Set<String> searchHistory = new LinkedHashSet<>();
     private String lastQuery;
     public static final String PREFS_NAME = "MyPrefsFile";
 
@@ -79,7 +80,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
         confSearchView();
         confSearchHistory();
 
-        IntentFilter productsFilter = new IntentFilter("SearchPage -> Products are ready");
+        IntentFilter productsFilter = new IntentFilter("SearchPage - Products are ready");
         LocalBroadcastManager.getInstance(this).registerReceiver(productsReceiver, productsFilter);
 
         if (savedInstanceState != null) {
@@ -275,7 +276,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
 
     private void setSearchResults(List<Product> results) {
         if (resultsAdapter == null) {
-            resultsAdapter = new ProductsResultsAdapter(results, this);
+            resultsAdapter = new ProductResultsAdapter(results, this);
             resultsAdapter.setLayoutMode(layoutMode);
         }
         else {
@@ -283,7 +284,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
             //resultsAdapter.setResults(results);
             //resultsAdapter.notifyDataSetChanged();
 
-            resultsAdapter = new ProductsResultsAdapter(results, this);
+            resultsAdapter = new ProductResultsAdapter(results, this);
         }
 
         if (resultsAdapter.getItemCount() == 0) {
@@ -298,10 +299,14 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
 
             productsRV.setAdapter(resultsAdapter);
 
-            searchHistory.add(lastQuery);
-            saveSearchQueries(searchHistory);
-            recentsAdapter.setRecents(new ArrayList<>(searchHistory));
-            recentsAdapter.notifyDataSetChanged();
+            if (categoriesSearchExecuted)   //If the search was done through clicking on one of the categories
+                categoriesSearchExecuted = false;
+            else {   //If the search was done through the SearchView
+                searchHistory.add(lastQuery);
+                saveSearchQueries(searchHistory);
+                recentsAdapter.setRecents(new ArrayList<>(searchHistory));
+                recentsAdapter.notifyDataSetChanged();
+            }
         }
         invalidateOptionsMenu();  //Now onCreateOptionsMenu() is called again
     }
@@ -311,8 +316,10 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
         public void onReceive(Context context, Intent intent) {
             loadingPanel.setVisibility(View.GONE);
 
-            if (searchForProducts == null)   //It means that the search was through the categoriesAdapter
+            if (searchForProducts == null) {   //It means that the search was through the categoriesAdapter
                 searchForProducts = categoriesAdapter.getSearchForProductsInstance();
+                categoriesSearchExecuted = true;
+            }
 
             setSearchResults(searchForProducts.getProducts());
             searchForProducts = null;
@@ -323,7 +330,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
     public Set<String> getSearchHistory() {
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         Set<String> searchHistoryTemp = preferences.getStringSet("SearchHistory", this.searchHistory);
-        HashSet<String> newSearchHistory = new HashSet<>();
+        LinkedHashSet<String> newSearchHistory = new LinkedHashSet<>();
         newSearchHistory.addAll(searchHistoryTemp);
         return newSearchHistory;
     }
@@ -332,7 +339,7 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
     public void saveSearchQueries(Set<String> queries) {
         //if clear recents button pressed
         if (queries == null)
-            searchHistory = new HashSet<>();
+            searchHistory = new LinkedHashSet<>();
 
         // We need an Editor object to make preference changes.
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -341,5 +348,12 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
 
         // Commit the edits
         editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
     }
 }

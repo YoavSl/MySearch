@@ -8,12 +8,8 @@
     <color name="MyBlueDark">#00588a</color>
     <color name="MyBlueDarker">#004570</color>
     <color name="MyBlue">#0A7FB2</color>
-    <color name="DropSet">#D10F31</color>
-    <color name="RegularSet">#0B86BB</color>
-    <color name="RegularSetBackup">#0BA4C8</color>
-    <color name="RestPauseSet">#C90064</color>
-    <color name="Superset">#D87910</color>
-    <color name="WarmUpSet">#51A001</color>
+    <color name="MyRed">#EA1137</color>
+    <color name="MyGrey">#F2F2F2</color>
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>
     <color name="LightYellow">#FFFFE0</color>

@@ -11,16 +11,21 @@ android:layout_marginEnd="8dp"
 card_view:cardCornerRadius="5dp"
 card_view:cardElevation="4dp">
 
+    <FrameLayout
+        android:id="@+id/inWishListView"
+        android:background="@drawable/in_wish_list"
+        android:layout_width="match_parent"
+        android:layout_height="2.5dp" />
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="6dp" >
+        android:layout_height="wrap_content" >
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal" >
 
             <ImageView
@@ -30,20 +35,32 @@ card_view:cardElevation="4dp">
                 android:layout_height="97dp"
                 android:layout_margin="5dp" />
 
-            <Button
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp"
-                android:id="@+id/wishListBT"
-                android:background="@drawable/not_in_wish_list"
-                style="?android:attr/borderlessButtonStyle" />
+            <ImageView
+                android:id="@+id/priceBackgroundIV"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="-1dp"
+                android:background="@drawable/price_background" />
+
+            <TextView
+                android:id="@+id/productPriceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginLeft="5sp"
+                android:layout_marginTop="6sp"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/White"
+                android:rotation="-45" />
+
         </FrameLayout>
 
         <TextView
             android:id="@+id/productNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2sp"
+            android:layout_margin="2sp"
             android:gravity="center_horizontal"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -56,7 +73,11 @@ card_view:cardElevation="4dp">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_marginTop="5sp"
+            android:layout_marginTop="3sp"
+            android:layout_marginStart="5sp"
+            android:layout_marginLeft="5sp"
+            android:layout_marginEnd="5sp"
+            android:layout_marginRight="5sp"
             android:textSize="14sp"
             android:ellipsize="end"
             android:maxLines="3" />

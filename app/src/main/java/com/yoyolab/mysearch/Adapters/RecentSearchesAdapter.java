@@ -13,6 +13,7 @@ import com.yoyolab.mysearch.Activities.SearchPage;
 import com.yoyolab.mysearch.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -24,12 +25,16 @@ public class RecentSearchesAdapter extends RecyclerView.Adapter<RecentSearchesAd
 
 
     public RecentSearchesAdapter (List<String> recentSearches, SearchPage searchPageActivity) {
+        //Collections.sort(recentSearches , Collections.reverseOrder());
+
         this.recentSearches = recentSearches;
         this.filterList = recentSearches;
         this.searchPageActivity = searchPageActivity;
     }
 
     public void setRecents(List<String> recents) {
+        //Collections.sort(recents , Collections.reverseOrder());
+
         recentSearches = recents;
         filterList = recents;
     }

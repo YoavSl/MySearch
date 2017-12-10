@@ -10,10 +10,10 @@
         android:orientation="vertical" >
 
          <android.support.v7.widget.SearchView
+             android:id="@+id/searchSV"
              android:layout_width="match_parent"
              android:layout_height="50dp"
              android:layout_margin="10dp"
-             android:id="@+id/searchSV"
              android:clickable="true"
              android:focusable="true"
              android:hint="@string/hint.search"
