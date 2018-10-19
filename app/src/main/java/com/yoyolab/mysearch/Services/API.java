@@ -79,6 +79,7 @@ public class API {
         } catch (JSONException e) {
             Log.e("Error parsing JSON", e.getMessage());
         }
+        Log.d("myTag", "myCheck4, products: " + results);
         return results;
     }
 

@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -294,8 +295,10 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
 
             productsRV.setAdapter(resultsAdapter);
 
-            if (categoriesSearchExecuted)   //If the search was done through clicking on one of the categories
+            if (categoriesSearchExecuted) {   //If the search was done through clicking on one of the categories
                 categoriesSearchExecuted = false;
+                searchSV.setQuery("", false);
+            }
             else {   //If the search was done through the SearchView
                 searchHistory.add(lastQuery);
                 saveSearchQueries(searchHistory);
@@ -314,7 +317,11 @@ public class SearchPage extends AppCompatActivity implements IHistoryRepository 
             if (searchForProducts == null) {   //It means that the search was through the categoriesAdapter
                 searchForProducts = categoriesAdapter.getSearchForProductsInstance();
                 categoriesSearchExecuted = true;
+
+                Log.d("myTag", "myCheck2");
             }
+
+            Log.d("myTag", "myCheck3, products: " + searchForProducts.getProducts());
             setSearchResults(searchForProducts.getProducts());
             searchForProducts = null;
         }

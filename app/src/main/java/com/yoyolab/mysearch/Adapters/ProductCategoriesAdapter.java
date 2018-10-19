@@ -3,6 +3,7 @@ package com.yoyolab.mysearch.Adapters;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,6 +116,7 @@ public class ProductCategoriesAdapter extends RecyclerView.Adapter<ProductCatego
                            break;
                    }
                     searchForProducts = new SearchForProducts(new HashSet<>(Arrays.asList(categoryId)), "ByCategoryID", context);
+                    Log.d("myTag", "myCheck1");
                 }
             });
         }
